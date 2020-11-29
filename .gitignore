@@ -15,3 +15,6 @@
 
 # Ignore Byebug command history file.
 .byebug_history
+
+#.env file that will ignore our user oAuth secrets
+.env
