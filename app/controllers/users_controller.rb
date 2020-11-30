@@ -13,10 +13,10 @@ class UsersController < ApplicationController
 
       user = User.find_by(uid: auth_hash[:uid],
                           provider: params[:provider])
-      if user #user exists
+      if user #user exists in database
         flash[:notice] = "Existing user #{user.username} is logged in."
 
-      else #user does not exist
+      else #user does not exist and will attempt to create new user
         user = User.build_from_github(auth_hash)
         if user.save
           flash[:success]= "Logged in as returning user #{user.username}"
@@ -26,14 +26,13 @@ class UsersController < ApplicationController
         end
       end
       session[:user_id] = user.id
-      redirect_to root_path
+      return redirect_to root_path
       # binding.pry
     end
 
   def logout
     session[:user_id] = nil
-    flash[:status] = :success
-    flash[:result_text] = "Successfully logged out"
+    flash[:success] = "Successfully logged out"
     redirect_to root_path
   end
 end
